@@ -23,7 +23,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: ['@/plugins/globalPlugins.js', '@/plugins/axios.js'],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -61,6 +61,17 @@ export default {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
+          app_primary: '#1dbf73',
+          app_secondary: '#20dd84',
+        },
+        light: {
+          primary: '#1dbf73',
+          accent: '#20dd84',
+          secondary: '#20dd84',
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: '#1dbf73',
         },
       },
     },

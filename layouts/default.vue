@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
@@ -24,25 +24,17 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
+    <v-app-bar :clipped-left="clipped" fixed app flat dense light>
+      <v-app-bar-nav-icon v-if="bp.smAndDown" @click.stop="drawer = !drawer" />
+      <v-btn v-if="bp.smAndDown" icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
+      <v-btn v-if="bp.smAndDown" icon @click.stop="clipped = !clipped">
         <v-icon>mdi-application</v-icon>
       </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
     </v-app-bar>
-    <v-main>
-      <v-container>
+    <v-main class="grey lighten-5">
+      <v-container fluid>
         <nuxt />
       </v-container>
     </v-main>
@@ -56,7 +48,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-footer :absolute="!fixed" app>
+    <v-footer :absolute="!fixed" app light>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
