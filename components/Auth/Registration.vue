@@ -65,26 +65,6 @@
             <v-col cols="12">
               <v-textarea outlined rows="1" label="Address"></v-textarea>
             </v-col>
-            <v-col cols="6">
-              <v-btn
-                :outlined="!role"
-                color="teal"
-                :class="role ? 'white--text' : 'black--text'"
-                block
-                @click=";(role = true), (selectedRole = 'designer')"
-                >i'm Designer</v-btn
-              >
-            </v-col>
-            <v-col cols="6">
-              <v-btn
-                :outlined="role"
-                color="teal"
-                :class="!role ? 'white--text' : 'black--text'"
-                block
-                @click=";(role = false), (selectedRole = 'employee')"
-                >i'm Employee</v-btn
-              >
-            </v-col>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? '6' : '12'">
               <v-text-field
                 v-model="password"
@@ -153,19 +133,6 @@
           culpa qui officia deserunt mollit anim id est laborum.
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-actions>
-          <v-btn text @click=";(agreement = false), (dialog = false)">
-            No
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-            class="white--text"
-            color="deep-purple accent-4"
-            @click=";(agreement = true), (dialog = false)"
-          >
-            Yes
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
     <v-snackbar v-model="snackbar" :color="errorColor" top right>
@@ -193,7 +160,6 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 export default {
   props: {
     isDialog: {
@@ -235,74 +201,5 @@ export default {
     errorMessage: '',
     errorColor: '',
   }),
-
-  computed: {
-    ...mapGetters({
-      authToken: 'auth/auth',
-    }),
-    loginInfo() {
-      return {
-        email: this.email,
-        password: this.password,
-      }
-    },
-  },
-  methods: {
-    validate() {
-      this.$refs.form.validate()
-    },
-
-    resetValidation() {
-      this.$refs.form.resetValidation()
-    },
-
-    goToSourceDestination() {
-      if (this.isDialog) {
-        this.$emit('closeAuthentication')
-      } else {
-        this.$router.push('/')
-      }
-    },
-
-    login() {
-      this.isLoading = true
-      if (!this.$refs.form.validate()) {
-        this.errorMessage = 'Please input valid data'
-        this.errorColor = 'error'
-        this.snackbar = true
-        this.isLoading = false
-      } else {
-        this.resetValidation()
-
-        this.$store
-          .dispatch('auth/postLogin', this.loginInfo)
-          .then((response) => {
-            this.goToSourceDestination()
-          })
-          .catch((error) => {
-            this.errorMessage = 'Invalid Credentials'
-            this.errorColor = 'error'
-            this.snackbar = true
-          })
-          .finally(() => {
-            this.isLoading = false
-          })
-      }
-    },
-
-    checkAuth(next, path) {
-      console.log(next)
-      // only admin-group has the access to any property without association
-      if (this.authToken !== null) {
-        this.$router.push('/')
-      } else {
-        this.$router.push('/auth')
-      }
-    },
-
-    selectRole() {
-      this.role = true
-    },
-  },
 }
 </script>

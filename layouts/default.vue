@@ -32,6 +32,29 @@
       <v-btn v-if="bp.smAndDown" icon @click.stop="clipped = !clipped">
         <v-icon>mdi-application</v-icon>
       </v-btn>
+      <v-img
+        class="mt-0 pt-0"
+        :src="logo"
+        :alt="title"
+        aspect-ratio="6"
+        :max-height="this.$vuetify.breakpoint.mdAndUp ? '48' : '42'"
+        max-width="180"
+        contain
+      ></v-img>
+      <v-btn
+        text
+        small
+        class="font-weight-bold"
+        color="primary"
+        :style="bp.mdAndUp ? 'margin-left : -75px' : ''"
+        >Health Care</v-btn
+      >
+      <v-spacer />
+      <div v-if="bp.mdAndUp">
+        <v-btn v-for="(menu, i) in menus" :key="i" text small :to="menu.to">
+          {{ menu.text }}
+        </v-btn>
+      </div>
     </v-app-bar>
     <v-main class="grey lighten-5">
       <v-container fluid>
@@ -77,6 +100,32 @@ export default {
       right: true,
       rightDrawer: false,
       title: 'Vuetify.js',
+      menus: [
+        {
+          text: 'Home',
+          to: '/',
+        },
+        {
+          text: 'Hospitals',
+          to: '/hospitals',
+        },
+        {
+          text: 'Donors',
+          to: '/donors',
+        },
+        {
+          text: 'Doctors',
+          to: '/doctors',
+        },
+        {
+          text: 'Helpline',
+          to: '/helpline',
+        },
+        {
+          text: 'Login',
+          to: '/auth',
+        },
+      ],
     }
   },
 }

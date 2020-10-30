@@ -1,7 +1,7 @@
 <template>
   <div
     align="center"
-    :style="bp.mdAndUp ? 'margin-top: 150px' : 'margin-top: 100px'"
+    :style="bp.mdAndUp ? 'margin-top: 90px' : 'margin-top: 80px'"
   >
     <h1 class="black--text mb-2">Login</h1>
     <v-card
