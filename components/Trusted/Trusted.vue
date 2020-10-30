@@ -61,19 +61,19 @@ export default {
       services: [
         {
           service_title: ' Total Doctors ',
-          number: '30,000',
+          number: '300',
           link: '',
           icon: doctor,
         },
         {
           service_title: 'Total Hospitals',
-          number: '$50,000',
+          number: '300',
           link: '',
           icon: hospital,
         },
         {
           service_title: ' Total Blood Donor',
-          number: '$150,000',
+          number: '2000',
           link: '',
           icon: donor,
         },
