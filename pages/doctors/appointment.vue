@@ -79,7 +79,7 @@
         <v-card flat light>
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-row no-gutters>
-              <v-col cols="12" sm="12" class="pa-1 mb-3">
+              <v-col cols="12" sm="6" class="pa-1 mb-3">
                 <v-text-field
                   v-model="hospital"
                   :rules="hospitalRules"
@@ -89,6 +89,17 @@
                   required
                   disabled
                   prepend-inner-icon="mdi-hospital-building"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" class="pa-1 mb-3">
+                <v-text-field
+                  v-model="doctor"
+                  outlined
+                  label="Doctor"
+                  hide-details="auto"
+                  required
+                  disabled
+                  prepend-inner-icon="mdi-account"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" class="pa-1">
@@ -163,6 +174,7 @@ export default {
       rating: 3,
       tab: null,
       hospital: '',
+      doctor: 'Md Yusuf',
       patient_name: '',
       patient_contact: '',
       patient_address: '',

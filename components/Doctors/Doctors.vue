@@ -1,6 +1,6 @@
 <template>
-  <v-container grid-list-lg>
-    <v-col cols="12" sm="12">
+  <v-container grid-list-lg :class="hospital ? 'pa-0' : ''">
+    <v-col cols="12" sm="12" :class="hospital ? 'pa-0' : ''">
       <v-card class="transparent" flat>
         <v-tabs v-model="tab" background-color="transparent">
           <v-tab v-for="item in tabs" :key="item.tab" class="black--text">
@@ -82,10 +82,12 @@ import dc2 from '@/static/dc2.jpg'
 import dc3 from '@/static/dc3.jpg'
 import dc4 from '@/static/dc4.jpg'
 export default {
+  // eslint-disable-next-line vue/require-prop-types
+  props: ['hospital'],
   data() {
     return {
-      name: 'Gigs',
-      title: 'Gigs',
+      name: 'Doctors',
+      title: 'Doctors',
       rating: 3,
       secondary: '#000020',
       tab: null,
@@ -188,7 +190,7 @@ export default {
 
 <style scoped>
 .card_hover:hover .title_hover {
-  color: green;
+  color: #14d470;
 }
 .title_hover {
   color: black;

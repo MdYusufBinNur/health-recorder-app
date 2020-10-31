@@ -29,6 +29,20 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <v-container fluid class="mt-5">
+      <v-layout justify-center align-center row wrap>
+        <v-flex xs12 class="mb-5 mt-1 text-center">
+          <span :class="bp.mdAndUp ? 'large_title' : 'small_text'"
+            >CHECKOUT LISTED HOSPITALS</span
+          >
+        </v-flex>
+      </v-layout>
+      <v-layout justify-center align-center row wrap>
+        <v-flex xs12 class="mb-10">
+          <Hospital />
+        </v-flex>
+      </v-layout>
+    </v-container>
   </v-row>
 </template>
 
@@ -36,8 +50,10 @@
 import Doctors from '@/components/Doctors/Doctors'
 import Slider from '@/components/Slider/Slider'
 import Trusted from '@/components/Trusted/Trusted'
+import Hospital from '../components/Hospital/Hospital'
 export default {
-  components: { Slider, Trusted, Doctors },
+  title: 'Home',
+  components: { Hospital, Slider, Trusted, Doctors },
 }
 </script>
 <style scoped>
