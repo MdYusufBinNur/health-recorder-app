@@ -58,7 +58,13 @@
                 </v-list-item>
                 <v-divider />
                 <v-card-actions class="">
-                  <v-btn block small color="teal" class="white--text" to="/doctors/appointment">
+                  <v-btn
+                    block
+                    small
+                    color="teal"
+                    class="white--text"
+                    to="/doctors/appointment"
+                  >
                     get an appointment
                   </v-btn>
                 </v-card-actions>

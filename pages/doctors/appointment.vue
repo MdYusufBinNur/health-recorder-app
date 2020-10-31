@@ -17,199 +17,211 @@
               ></v-img>
             </v-list-item-avatar>
 
-            <v-list-item-content
-              :class="$vuetify.breakpoint.mdAndUp ? 'ml-10' : ''"
-            >
-              <v-list-item-title
-                v-for="(item, i) in items"
-                :key="i"
-                class="font-weight-bold ml-1 pa-3"
-              >
-                <nuxt-link
-                  :to="item.link"
-                  style="font-size: 14px"
-                  class="blue--text text-capitalize text-decoration-none"
-                >
-                  {{ item.title }}
-                </nuxt-link>
+            <v-list-item-content>
+              <v-list-item-title class="pl-1">
+                Md Yusuf Bin Nur
               </v-list-item-title>
+              <v-list-item-subtitle class="expert_title pl-1"
+                >MBBS, FCPS</v-list-item-subtitle
+              >
+              <v-list-item-subtitle class="expert_title pl-1"
+                >Neurologist</v-list-item-subtitle
+              >
             </v-list-item-content>
           </v-list-item>
         </v-card>
         <v-card flat outlined class="mt-5" light>
-          <h2 class="text-center pa-3" align="center">
-            What service you are looking for?
-          </h2>
-          <v-card-text class="text-center pa-3 black--text" align="center">
-            Make a request and receive offers from qualified sellers.
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-list-item-avatar
-              rounded
-              size="100"
-              color="transparent"
-              class="mr-2"
-            >
-              <v-img
-                class="rounded-circle text-center"
-                align="center"
-                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-              ></v-img>
-            </v-list-item-avatar>
-            <v-spacer></v-spacer>
-          </v-card-actions>
-          <v-card-actions class="pa-5">
-            <v-spacer />
-            <v-btn color="primary"> Post a request </v-btn>
-            <v-spacer />
-          </v-card-actions>
+          <h2 class="pa-2">Hospital List</h2>
+          <v-divider />
+          <v-list>
+            <v-list-item v-for="(hospital, i) in hospitals" :key="i">
+              <v-list-item-icon>
+                <v-icon color="primary">mdi-arrow-right-drop-circle</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title> {{ hospital.name }} </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ hospital.title }}
+                </v-list-item-subtitle>
+                <p style="font-size: 11px">
+                  {{ hospital.schedule }}
+                </p>
+                <p style="font-size: 11px">
+                  {{ hospital.contact }}
+                </p>
+                <v-card-title>
+                  <v-tooltip right>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        color="primary"
+                        dark
+                        icon
+                        x-small
+                        outlined
+                        style="margin-left: -15px"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="getAnAppointment(hospital)"
+                      >
+                        <v-icon x-small> mdi-call-made </v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Click To Get Appointment</span>
+                  </v-tooltip>
+                </v-card-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider />
+          </v-list>
         </v-card>
       </v-col>
       <v-col cols="12" sm="8">
-        <v-card class="transparent" flat light>
-          <v-tabs v-model="tab" background-color="transparent">
-            <v-tab v-for="item in tabs" :key="item.tab" class="black--text">
-              <v-badge
-                v-if="item.cont !== null"
-                color="primary"
-                :content="item.cont"
-                inline
-              >
-                {{ item.tab }}
-              </v-badge>
-
-              <v-list-item-title v-else style="font-size: 14px">
-                {{ item.tab }}
-              </v-list-item-title>
-            </v-tab>
-          </v-tabs>
-        </v-card>
-        <v-card flat class="mt-3" light>
-          <v-tabs-items v-model="tab" light>
-            <v-tab-item v-for="item in tabs" :key="item.tab">
-              <v-card
-                v-for="(content_title, i) in item.content"
-                :key="i"
-                light
-                flat
-                outlined
-                :class="
-                  !content_title.is_read ? 'mb-1 green lighten-5' : 'mb-2'
-                "
-              >
-                <nuxt-link
-                  :to="content_title.link"
-                  class="text-decoration-none"
+        <v-card flat light>
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-row no-gutters>
+              <v-col cols="12" sm="12" class="pa-1 mb-3">
+                <v-text-field
+                  v-model="hospital"
+                  :rules="hospitalRules"
+                  outlined
+                  label="Hospital"
+                  hide-details="auto"
+                  required
+                  disabled
+                  prepend-inner-icon="mdi-hospital-building"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" class="pa-1">
+                <v-text-field
+                  v-model="patient_name"
+                  :rules="nameRules"
+                  outlined
+                  label="Name"
                 >
-                  <v-list-item>
-                    <v-list-item-avatar>
-                      <v-icon
-                        large
-                        dense
-                        size="2"
-                        color="light"
-                        class="grey lighten-3"
-                        >mdi-bell-outline</v-icon
-                      >
-                    </v-list-item-avatar>
-                    <v-card-text color="success">{{
-                      content_title.title
-                    }}</v-card-text>
-                  </v-list-item>
-                </nuxt-link>
-              </v-card>
-            </v-tab-item>
-          </v-tabs-items>
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" class="pa-1">
+                <v-text-field
+                  v-model="patient_age"
+                  :rules="ageRules"
+                  outlined
+                  label="Age"
+                  type="number"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" class="pa-1">
+                <v-text-field
+                  v-model="patient_mobile"
+                  :rules="contactRules"
+                  outlined
+                  label="Mobile"
+                >
+                </v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" class="pa-1">
+                <v-text-field
+                  v-model="patient_address"
+                  outlined
+                  label="Address"
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn
+                right
+                small
+                color="primary"
+                width="200px"
+                :loading="loading"
+                @click="applyForAppointment"
+                >Apply</v-btn
+              >
+              <v-spacer />
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-col>
+      <v-snackbar v-model="snackbar" :color="errorColor" top right>
+        {{ errorMessage }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" text v-bind="attrs" @click="snackbar = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-row>
   </v-container>
 </template>
-
 <script>
 export default {
   name: 'Appointment',
   data() {
     return {
+      rating: 3,
       tab: null,
-      items: [
+      hospital: '',
+      patient_name: '',
+      patient_contact: '',
+      patient_address: '',
+      patient_mobile: '',
+      patient_age: '',
+      hospitals: [
         {
-          title: 'View my Favorites',
-          link: '',
+          name: 'Bangladesh Eye Hospital',
+          location: 'Dhaka',
+          contact: '+880 181 2564585',
+          title: 'Neurologist, Medicine Specialist',
+          schedule:
+            'Friday - Saturday (3.30 pm - 7.00 pm), Wednesday(3.30 pm - 7.00 pm)',
         },
         {
-          title: 'Invite Friends',
-          link: '',
+          name: 'Dhaka Medical College (DMC)',
+          location: 'Dhaka',
+          contact: '+880 181 2564585',
+          title: 'Neurologist, Medicine Specialist',
+          schedule:
+            'Friday - Saturday (3.30 pm - 7.00 pm), Wednesday(3.30 pm - 7.00 pm)',
         },
         {
-          title: 'Start Selling',
-          link: '',
-        },
-      ],
-      tabs: [
-        {
-          tab: 'Notifications',
-          cont: 3,
-          content: [
-            {
-              title:
-                'Get 20% off your first order! Use promo code: FIVERRGROW20. This offer ends today!',
-              is_read: true,
-              link: '',
-            },
-            {
-              title:
-                'Get 20% off your first order! Use promo code: FIVERRGROW20. This offer ends today!Get 20% off your first order! Use promo code: FIVERRGROW20. This offer ends today!',
-              is_read: true,
-              link: '',
-            },
-            {
-              title:
-                'Get 20% off your first order! Use promo code: FIVERRGROW20. This offer ends today!',
-              is_read: false,
-              link: '',
-            },
-            {
-              title:
-                'Get 20% off your first order! Use promo code: FIVERRGROW20. This offer ends today!',
-              is_read: true,
-              link: '',
-            },
-          ],
-        },
-        {
-          tab: 'Todos',
-          cont: null,
-          content: [
-            {
-              title:
-                'Get 20% off your first order! Use promo code: FIVERRGROW20. This offer ends today!',
-              is_read: true,
-              link: '',
-            },
-            {
-              title:
-                'Get 20% off your first order! Use promo code: FIVERRGROW20. This offer ends today!Get 20% off your first order! Use promo code: FIVERRGROW20. This offer ends today!',
-              is_read: true,
-              link: '',
-            },
-            {
-              title:
-                'Get 20% off your first order! Use promo code: FIVERRGROW20. This offer ends today!',
-              is_read: false,
-              link: '',
-            },
-            {
-              title:
-                'Get 20% off your first order! Use promo code: FIVERRGROW20. This offer ends today!',
-              is_read: true,
-              link: '',
-            },
-          ],
+          name: 'Chittagong Medical College (CMC)',
+          location: 'Dhaka',
+          contact: '+880 181 2564585',
+          title: 'Neurologist, Medicine Specialist',
+          schedule:
+            'Friday - Saturday (3.30 pm - 7.00 pm), Wednesday(3.30 pm - 7.00 pm)',
         },
       ],
+      valid: true,
+      nameRules: [(v) => !!v || 'Name is required'],
+      contactRules: [(v) => !!v || 'Contact is required'],
+      ageRules: [(v) => !!v || 'Age is required'],
+      hospitalRules: [(v) => !!v || 'Please Specify A Hospital Name'],
+      snackbar: false,
+      loading: false,
+      errorMessage: '',
+      errorColor: '',
     }
+  },
+  methods: {
+    getAnAppointment(hospital) {
+      this.hospital = hospital.name
+    },
+    applyForAppointment() {
+      if (!this.$refs.form.validate()) {
+        this.errorMessage = 'Please input valid data'
+        this.errorColor = 'error'
+        this.snackbar = true
+        this.loading = false
+      } else {
+        this.loading = true
+      }
+    },
+    validate() {
+      this.$refs.form.validate()
+    },
   },
 }
 </script>
