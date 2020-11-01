@@ -2,7 +2,6 @@
   <v-app>
     <v-navigation-drawer
       v-model="drawer"
-      :mini-variant="miniVariant"
       :clipped="clipped"
       fixed
       app
@@ -26,9 +25,6 @@
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app flat dense light>
       <v-app-bar-nav-icon v-if="bp.smAndDown" @click.stop="drawer = !drawer" />
-      <v-btn v-if="bp.smAndDown" icon @click.stop="miniVariant = !miniVariant">
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
       <v-btn v-if="bp.smAndDown" icon @click.stop="clipped = !clipped">
         <v-icon>mdi-application</v-icon>
       </v-btn>
