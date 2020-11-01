@@ -1,11 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      v-model="drawer"
-      :clipped="clipped"
-      fixed
-      app
-    >
+    <v-navigation-drawer v-model="drawer" :clipped="clipped" fixed app>
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
@@ -106,8 +101,8 @@ export default {
           to: '/hospitals',
         },
         {
-          text: 'Donors',
-          to: '/donors',
+          text: 'Schedule',
+          to: '/schedule',
         },
         {
           text: 'Doctors',
