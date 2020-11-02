@@ -105,6 +105,10 @@ export default {
           to: '/schedule',
         },
         {
+          text: 'Appointment List',
+          to: '/dashboard/appointment/list',
+        },
+        {
           text: 'Doctors',
           to: '/doctors',
         },
