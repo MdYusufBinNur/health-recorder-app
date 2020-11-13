@@ -84,7 +84,7 @@ export default {
           location: 'Chittagong',
           contact: '+8801815111111',
           image: cmch,
-          dept: {
+          department: {
             tab: 'Orthopedics',
             cont: 3,
             doctors: [
@@ -124,7 +124,7 @@ export default {
           location: 'Dhaka',
           contact: '+8801815111111',
           image: dmc,
-          dept: {
+          department: {
             tab: 'Orthopedics',
             cont: 3,
             doctors: [
@@ -164,7 +164,7 @@ export default {
           location: 'Chittagong',
           contact: '+8801815111111',
           image: chvr,
-          dept: {
+          department: {
             tab: 'Orthopedics',
             cont: 3,
             doctors: [
@@ -204,7 +204,7 @@ export default {
           location: 'Chittagong',
           contact: '+8801815111111',
           image: applo,
-          dept: {
+          department: {
             tab: 'Orthopedics',
             cont: 3,
             doctors: [
