@@ -171,6 +171,11 @@ export default {
         this.$store
           .dispatch('auth/postLogin', this.loginInfo)
           .then((response) => {
+            if (response.data.message) {
+              this.errorMessage = response.data.message
+              this.errorColor = 'error'
+              this.snackbar = true
+            }
             this.goToSourceDestination()
           })
           // eslint-disable-next-line handle-callback-err
