@@ -8,6 +8,7 @@
 import Login from '@/components/Auth/Login'
 export default {
   name: 'Index',
+  layout: 'basic',
   components: { Login },
 }
 </script>

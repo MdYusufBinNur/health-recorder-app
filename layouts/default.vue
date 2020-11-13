@@ -3,7 +3,7 @@
     <v-navigation-drawer v-model="drawer" :clipped="clipped" fixed app>
       <v-list>
         <v-list-item
-          v-for="(item, i) in items"
+          v-for="(item, i) in menus"
           :key="i"
           :to="item.to"
           router
@@ -13,7 +13,7 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title v-text="item.text" />
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -45,6 +45,10 @@
         <v-btn v-for="(menu, i) in menus" :key="i" text small :to="menu.to">
           {{ menu.text }}
         </v-btn>
+        <v-btn text large color="primary" @click="logout()">
+          Sign Out
+          <v-icon dense right> mdi-account-arrow-right </v-icon>
+        </v-btn>
       </div>
     </v-app-bar>
     <v-main class="grey lighten-5">
@@ -70,6 +74,7 @@
 
 <script>
 export default {
+  middleware: ['authentication'],
   data() {
     return {
       clipped: false,
@@ -93,35 +98,38 @@ export default {
       title: 'Vuetify.js',
       menus: [
         {
+          icon: 'mdi-apps',
           text: 'Home',
           to: '/',
         },
         {
+          icon: 'mdi-apps',
           text: 'Hospitals',
           to: '/hospitals',
         },
         {
+          icon: 'mdi-apps',
           text: 'Schedule',
           to: '/schedule',
         },
         {
+          icon: 'mdi-apps',
           text: 'Appointment List',
           to: '/dashboard/appointment/list',
         },
         {
+          icon: 'mdi-apps',
           text: 'Doctors',
           to: '/doctors',
         },
-        {
-          text: 'Helpline',
-          to: '/helpline',
-        },
-        {
-          text: 'Login',
-          to: '/auth',
-        },
       ],
     }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('auth/logout')
+      this.$router.push('/auth')
+    },
   },
 }
 </script>
