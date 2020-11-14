@@ -15,7 +15,7 @@
                     color="white"
                     outlined
                     class="white--text details"
-                    @click="sendToDetailsPage(hospital)"
+                    :to="'/hospitals/' + hospital.id"
                     >Details</v-btn
                   >
                 </div>
@@ -55,16 +55,6 @@
   </v-container>
 </template>
 <script>
-import dc1 from '@/static/dc1.jpg'
-import dc2 from '@/static/dc2.jpg'
-import dc3 from '@/static/dc3.jpg'
-import dc4 from '@/static/dc4.jpg'
-import cmch from '@/static/hospitals/cmch.jpg'
-import dmc from '@/static/hospitals/dmc.jpg'
-import chvr from '@/static/hospitals/cvrh.jpg'
-import applo from '@/static/hospitals/applo.jpg'
-import beh from '@/static/hospitals/beh.jpg'
-
 export default {
   data() {
     return {
@@ -73,174 +63,11 @@ export default {
       rating: 3,
       secondary: '#000020',
       tab: null,
-      cmch,
-      applo,
-      chvr,
-      dmc,
-      beh,
-      hospitals: [
-        {
-          name: 'Chittagong Medical College',
-          location: 'Chittagong',
-          contact: '+8801815111111',
-          image: cmch,
-          department: {
-            tab: 'Orthopedics',
-            cont: 3,
-            doctors: [
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Md Yusuf Bin Nur',
-                image: dc1,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Md Ismail Hossain',
-                image: dc2,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Mr Sayed',
-                image: dc3,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'MRs Selina',
-                image: dc4,
-              },
-            ],
-          },
-        },
-        {
-          name: 'DhakaMedical College Hospital',
-          location: 'Dhaka',
-          contact: '+8801815111111',
-          image: dmc,
-          department: {
-            tab: 'Orthopedics',
-            cont: 3,
-            doctors: [
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Md Yusuf Bin Nur',
-                image: dc1,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Md Ismail Hossain',
-                image: dc2,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Mr Sayed',
-                image: dc3,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'MRs Selina',
-                image: dc4,
-              },
-            ],
-          },
-        },
-        {
-          name: 'Chevron',
-          location: 'Chittagong',
-          contact: '+8801815111111',
-          image: chvr,
-          department: {
-            tab: 'Orthopedics',
-            cont: 3,
-            doctors: [
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Md Yusuf Bin Nur',
-                image: dc1,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Md Ismail Hossain',
-                image: dc2,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Mr Sayed',
-                image: dc3,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'MRs Selina',
-                image: dc4,
-              },
-            ],
-          },
-        },
-        {
-          name: 'Applo',
-          location: 'Chittagong',
-          contact: '+8801815111111',
-          image: applo,
-          department: {
-            tab: 'Orthopedics',
-            cont: 3,
-            doctors: [
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Md Yusuf Bin Nur',
-                image: dc1,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Md Ismail Hossain',
-                image: dc2,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'Mr Sayed',
-                image: dc3,
-              },
-              {
-                title: 'MBBS, FCPS',
-                is_read: true,
-                link: '',
-                name: 'MRs Selina',
-                image: dc4,
-              },
-            ],
-          },
-        },
-      ],
+      hospitals: [],
     }
+  },
+  created() {
+    this.getHospitalLists()
   },
   methods: {
     sendToDetailsPage(hospital) {
@@ -250,6 +77,19 @@ export default {
           hospital,
         },
       })
+    },
+    getHospitalLists() {
+      try {
+        this.$axios
+          .get('/hospitals')
+          .then((response) => {
+            this.hospitals = response.data
+            this.loading = false
+          })
+          .catch((error) => {
+            console.error(error.message)
+          })
+      } catch (e) {}
     },
   },
   head() {

@@ -1,8 +1,7 @@
 // eslint-disable-next-line import/named
 import { healthUserToken, healthAuthToken } from '../constants/AppTokens'
-const Cookie = process.client ? require('js-cookie') : undefined
-const loginQuery =
-  'ul.roles,ul.profilePic,image.avatar,userRole.role,ul.customer,ul.staff,user.admin,user.userProfile'
+const Cookie = process.client ? require('js-cookie') : undefined;
+const loginQuery = '';
 
 function getAuthToken() {
   return Cookie
