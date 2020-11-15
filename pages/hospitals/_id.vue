@@ -6,7 +6,7 @@
     <v-row>
       <v-col cols="12" sm="4">
         <v-card max-width="344" outlined flat light>
-          <v-img :src="hospital.image" height="170px"></v-img>
+          <v-img :src="baseURL + hospital.image" height="170px"></v-img>
           <v-list-item class="px-2">
             <v-list-item-content>
               <v-list-item-title class="font-weight-bold pl-1">
@@ -40,15 +40,6 @@
 </template>
 
 <script>
-import dc1 from '@/static/dc1.jpg'
-import dc2 from '@/static/dc2.jpg'
-import dc3 from '@/static/dc3.jpg'
-import dc4 from '@/static/dc4.jpg'
-import cmch from '@/static/hospitals/cmch.jpg'
-import dmc from '@/static/hospitals/dmc.jpg'
-import chvr from '@/static/hospitals/cvrh.jpg'
-import applo from '@/static/hospitals/applo.jpg'
-import beh from '@/static/hospitals/beh.jpg'
 import Doctors from '../../components/Doctors/Doctors'
 export default {
   name: 'Details',

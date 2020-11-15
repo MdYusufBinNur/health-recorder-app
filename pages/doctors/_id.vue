@@ -13,18 +13,19 @@
             >
               <v-img
                 class="rounded-circle"
-                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                :src="baseURL + doctor.image"
               ></v-img>
             </v-list-item-avatar>
 
             <v-list-item-content>
               <v-list-item-title class="pl-1">
-               {{ doctor.name }}
+                {{ doctor.name }}
               </v-list-item-title>
               <v-list-item-subtitle class="expert_title pl-1"
-              >{{ doctor.designation }}</v-list-item-subtitle
-              >
-              <v-list-item-subtitle class="expert_title pl-1"
+                >{{ doctor.designation }}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle
+                class="expert_title pl-1"
               ></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -33,20 +34,22 @@
           <h2 class="pa-2">Hospital List</h2>
           <v-divider />
           <v-list>
-            <v-list-item v-for="(hospital, i) in hospitals" :key="i">
+            <v-list-item>
               <v-list-item-icon>
                 <v-icon color="primary">mdi-arrow-right-drop-circle</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title> {{ hospital.name }} </v-list-item-title>
+                <v-list-item-title>
+                  {{ dc_hospital.name }}
+                </v-list-item-title>
                 <v-list-item-subtitle>
-                  {{ hospital.title }}
+                  {{ dc_dept.name }}
                 </v-list-item-subtitle>
                 <p style="font-size: 11px">
-                  {{ hospital.schedule }}
+                  {{ doctor.day }}
                 </p>
                 <p style="font-size: 11px">
-                  {{ hospital.contact }}
+                  {{ dc_hospital.contact }}
                 </p>
                 <v-card-title>
                   <v-tooltip right>
@@ -60,9 +63,9 @@
                         style="margin-left: -15px"
                         v-bind="attrs"
                         v-on="on"
-                        @click="getAnAppointment(hospital)"
+                        @click="getAnAppointment(dc_hospital)"
                       >
-                        <v-icon x-small> mdi-call-made </v-icon>
+                        <v-icon x-small> mdi-call-made</v-icon>
                       </v-btn>
                     </template>
                     <span>Click To Get Appointment</span>
@@ -86,15 +89,17 @@
                   label="Hospital"
                   hide-details="auto"
                   required
-                  disabled
+                  readonly
+                  color="primary"
                   prepend-inner-icon="mdi-hospital-building"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" class="pa-1 mb-3">
                 <v-text-field
-                  v-model="doctor"
+                  v-model="doctor.name"
                   outlined
                   label="Doctor"
+                  :placeholder="doctor.name"
                   hide-details="auto"
                   required
                   disabled
@@ -106,7 +111,7 @@
                   v-model="patient_name"
                   :rules="nameRules"
                   outlined
-                  label="Name"
+                  label="Patient Name"
                 >
                 </v-text-field>
               </v-col>
@@ -122,7 +127,7 @@
               </v-col>
               <v-col cols="12" sm="6" class="pa-1">
                 <v-text-field
-                  v-model="patient_mobile"
+                  v-model="patient_contact"
                   :rules="contactRules"
                   outlined
                   label="Mobile"
@@ -137,6 +142,64 @@
                 >
                 </v-text-field>
               </v-col>
+              <v-col cols="12" sm="6" class="pa-1">
+                <v-menu
+                  ref="menu"
+                  v-model="menu2"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="appointment_time"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="appointment_time"
+                      :rules="timeRules"
+                      label="Select time"
+                      readonly
+                      v-bind="attrs"
+                      outlined
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    v-if="menu2"
+                    v-model="appointment_time"
+                    :rules="timeRules"
+                    full-width
+                    @click:minute="$refs.menu.save(appointment_time)"
+                  ></v-time-picker>
+                </v-menu>
+              </v-col>
+              <v-col cols="12" sm="6" class="pa-1">
+                <v-menu
+                  v-model="menu3"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="appointment_date"
+                      label="Date"
+                      readonly
+                      outlined
+                      :rules="endRules"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="appointment_date"
+                    @input="menu3 = false"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
             </v-row>
             <v-card-actions>
               <v-spacer />
@@ -147,8 +210,8 @@
                 width="200px"
                 :loading="loading"
                 @click="applyForAppointment"
-              >Apply</v-btn
-              >
+                >Apply
+              </v-btn>
               <v-spacer />
             </v-card-actions>
           </v-form>
@@ -166,91 +229,120 @@
   </v-container>
 </template>
 <script>
-  export default {
-    name: 'Appointment',
-    data() {
+import { mapGetters } from 'vuex'
+
+export default {
+  name: 'Appointment',
+  data() {
+    return {
+      rating: 3,
+      tab: null,
+      hospital: '',
+      dc_hospital: {},
+      dc_dept: {},
+      doctor: {},
+      valid: true,
+      appointment_time: null,
+      picker: null,
+      appointment_date: '',
+      menu2: false,
+      menu3: false,
+      nameRules: [(v) => !!v || 'Name is required'],
+      contactRules: [(v) => !!v || 'Contact is required'],
+      ageRules: [(v) => !!v || 'Age is required'],
+      hospitalRules: [(v) => !!v || 'Please Specify A Hospital Name'],
+      dayRules: [(v) => !!v || 'Please Select Day'],
+      timeRules: [(v) => !!v || 'Please Select Your time'],
+      endRules: [(v) => !!v || 'Please Select End Date Of You Schedule'],
+      snackbar: false,
+      loading: false,
+      errorMessage: '',
+      errorColor: '',
+      hospital_id: '',
+      user_id: '',
+      doctor_id: '',
+      patient_name: '',
+      patient_contact: '',
+      patient_address: '',
+      patient_mobile: '',
+      patient_age: '',
+    }
+  },
+  created() {
+    this.getHospitalList()
+  },
+  // eslint-disable-next-line vue/order-in-components
+  computed: {
+    ...mapGetters({
+      authToken: 'auth/auth',
+    }),
+    appointmentInfo() {
       return {
-        rating: 3,
-        tab: null,
-        hospital: '',
-        doctor: {},
-        patient_name: '',
-        patient_contact: '',
-        patient_address: '',
-        patient_mobile: '',
-        patient_age: '',
-        hospitals: [
-          {
-            name: 'Bangladesh Eye Hospital',
-            location: 'Dhaka',
-            contact: '+880 181 2564585',
-            title: 'Neurologist, Medicine Specialist',
-            schedule:
-              'Friday - Saturday (3.30 pm - 7.00 pm), Wednesday(3.30 pm - 7.00 pm)',
-          },
-          {
-            name: 'Dhaka Medical College (DMC)',
-            location: 'Dhaka',
-            contact: '+880 181 2564585',
-            title: 'Neurologist, Medicine Specialist',
-            schedule:
-              'Friday - Saturday (3.30 pm - 7.00 pm), Wednesday(3.30 pm - 7.00 pm)',
-          },
-          {
-            name: 'Chittagong Medical College (CMC)',
-            location: 'Dhaka',
-            contact: '+880 181 2564585',
-            title: 'Neurologist, Medicine Specialist',
-            schedule:
-              'Friday - Saturday (3.30 pm - 7.00 pm), Wednesday(3.30 pm - 7.00 pm)',
-          },
-        ],
-        valid: true,
-        nameRules: [(v) => !!v || 'Name is required'],
-        contactRules: [(v) => !!v || 'Contact is required'],
-        ageRules: [(v) => !!v || 'Age is required'],
-        hospitalRules: [(v) => !!v || 'Please Specify A Hospital Name'],
-        snackbar: false,
-        loading: false,
-        errorMessage: '',
-        errorColor: '',
+        hospital_id: this.hospital_id,
+        user_id: this.user_id,
+        doctor_id: this.doctor_id,
+        patient_name: this.patient_name,
+        patient_contact: this.patient_contact,
+        patient_address: this.patient_address,
+        patient_age: this.patient_age,
+        app_time: this.appointment_time,
+        app_date: this.appointment_date,
       }
     },
-    created() {
-      this.getHospitalList()
+  },
+  methods: {
+    getAnAppointment(hospital) {
+      this.hospital = hospital.name
+      this.hospital_id = this.dc_hospital.id
     },
-    methods: {
-      getAnAppointment(hospital) {
-        this.hospital = hospital.name
-      },
-      applyForAppointment() {
-        if (!this.$refs.form.validate()) {
-          this.errorMessage = 'Please input valid data'
-          this.errorColor = 'error'
-          this.snackbar = true
-          this.loading = false
-        } else {
-          this.loading = true
-        }
-      },
-      getHospitalList()
-      {
-        try{
-          this.$axios
+    applyForAppointment() {
+      if (!this.$refs.form.validate()) {
+        this.errorMessage = 'Please input valid data'
+        this.errorColor = 'error'
+        this.snackbar = true
+        this.loading = false
+      } else {
+        this.loading = true
+        this.$store
+          .dispatch('appointment/saveAppointment', this.appointmentInfo)
+          .then((response) => {
+            if (response.data.error) {
+              this.errorColor = 'error'
+            } else {
+              this.errorColor = 'success'
+            }
+            this.errorMessage = response.data.message
+            this.snackbar = true
+            this.reset()
+            this.loading = false
+          })
+          // eslint-disable-next-line handle-callback-err
+          .catch((error) => {})
+          .finally()
+      }
+    },
+    getHospitalList() {
+      try {
+        this.$axios
           .get('/doctor/' + this.$route.params.id)
           .then((response) => {
             this.doctor = response.data
+            this.dc_dept = response.data.department
+            this.dc_hospital = response.data.hospital
+            this.doctor_id = this.doctor.id
+            this.user_id = this.userData.id
           })
           .finally()
-        }catch (e) {
-
-        }
-      },
-      validate() {
-        this.$refs.form.validate()
-      },
+      } catch (e) {}
     },
-  }
+    validate() {
+      this.$refs.form.validate()
+    },
+    reset() {
+      this.$refs.form.reset()
+    },
+  },
+}
 </script>
 
 <style scoped></style>

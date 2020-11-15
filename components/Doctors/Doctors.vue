@@ -29,7 +29,7 @@
                 flat
                 light
               >
-                <v-img :src="dc.image" height="170px"></v-img>
+                <v-img :src="baseURL + dc.image" height="170px"></v-img>
                 <v-list-item class="px-2">
                   <v-list-item-content>
                     <h2 class="font-weight-bold secondary--text pl-1">
@@ -53,7 +53,7 @@
                     ></v-rating>
                   </v-list-item-content>
                 </v-list-item>
-                <v-divider/>
+                <v-divider />
                 <v-card-actions class="">
                   <v-btn
                     block
@@ -127,7 +127,7 @@
                     ></v-rating>
                   </v-list-item-content>
                 </v-list-item>
-                <v-divider/>
+                <v-divider />
                 <v-card-actions class="">
                   <v-btn
                     block
@@ -148,83 +148,78 @@
   </v-container>
 </template>
 <script>
-  import dc1 from '@/static/dc1.jpg'
-  import dc2 from '@/static/dc2.jpg'
-  import dc3 from '@/static/dc3.jpg'
-  import dc4 from '@/static/dc4.jpg'
 
-  export default {
-    // eslint-disable-next-line vue/require-prop-types
-    props: ['hospital', 'details'],
-    data() {
-      return {
-        name: 'Doctors',
-        title: 'Doctors',
-        rating: 3,
-        secondary: '#000020',
-        tab: null,
-        loading: false,
-        tabs: [],
-      }
+export default {
+  // eslint-disable-next-line vue/require-prop-types
+  props: ['hospital', 'details'],
+  data() {
+    return {
+      name: 'Doctors',
+      title: 'Doctors',
+      rating: 3,
+      secondary: '#000020',
+      tab: null,
+      loading: false,
+      tabs: [],
+    }
+  },
+  created() {
+    this.getDoctorLists()
+  },
+  methods: {
+    sendToDetailsPage(expert) {
+      this.$router.push({
+        name: 'experts-details',
+        params: {
+          expert,
+        },
+      })
     },
-    created() {
-      this.getDoctorLists()
+    getDoctorLists() {
+      try {
+        this.$axios
+          .get('/doctors')
+          .then((response) => {
+            this.tabs = response.data
+          })
+          .finally()
+      } catch (e) {}
     },
-    methods: {
-      sendToDetailsPage(expert) {
-        this.$router.push({
-          name: 'experts-details',
-          params: {
-            expert,
-          },
-        })
-      },
-      getDoctorLists() {
-        try {
-          this.$axios
-            .get('/doctors')
-            .then((response) => {
-              this.tabs = response.data
-            }).finally()
-        } catch (e) {
-
-        }
-      }
-    },
-    head() {
-      return {
-        title: this.title,
-        meta: [
-          {
-            hid: 'description',
-            name: 'description',
-            content: 'softarray services page',
-          },
-        ],
-      }
-    },
-  }
+  },
+  head() {
+    return {
+      title: this.title,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'softarray services page',
+        },
+      ],
+    }
+  },
+}
 </script>
 
 <style scoped>
-  .card_hover:hover .title_hover {
-    color: #14d470;
-  }
+.card_hover:hover .title_hover {
+  color: #14d470;
+}
 
-  .title_hover {
-    color: black;
-  }
+.title_hover {
+  color: black;
+}
 
-  .v-card--reveal {
-    align-items: center;
-    bottom: 0;
-    justify-content: center;
-    opacity: 0.8;
-    position: absolute;
-    width: 100%;
-  }
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: 0.8;
+  position: absolute;
+  width: 100%;
+}
 
-  .expert_title {
-    font-size: 12px;
-  }
+.expert_title {
+  font-size: 12px;
+}
 </style>

@@ -120,6 +120,28 @@
                 </v-card>
               </v-dialog>
             </template>
+            <template #item.status="{ item }">
+              <v-btn
+                v-if="item.status === 'pending'"
+                text
+                outlined
+                class="red darken-4 white--text"
+                x-small
+                rounded
+              >
+                {{ item.status }}
+              </v-btn>
+              <v-btn
+                v-if="item.status === 'checked'"
+                text
+                outlined
+                class="primary darken-2 white--text"
+                x-small
+                rounded
+              >
+                {{ item.status }}
+              </v-btn>
+            </template>
           </v-data-table>
         </v-card>
       </v-col>
@@ -129,7 +151,7 @@
 
 <script>
 export default {
-  name: 'GigList',
+  name: 'AppointmentList',
   data() {
     return {
       tab: null,
@@ -143,19 +165,19 @@ export default {
         {
           text: 'Doctor',
           align: 'start',
-          value: 'doctor',
+          value: 'doctor.name',
         },
         {
           text: 'Hospital',
-          value: 'hospital',
+          value: 'doctor.hospital.name',
         },
         {
           text: 'Time',
-          value: 'time',
+          value: 'app_time',
         },
         {
           text: 'Date',
-          value: 'date',
+          value: 'app_date',
         },
         {
           text: 'Upload Prescription',
@@ -163,38 +185,33 @@ export default {
           align: 'center',
         },
         {
+          text: 'Status',
+          value: 'status',
+          align: 'center',
+        },
+        {
           text: 'Delete',
           value: 'delete',
         },
       ],
-      lists: [
-        {
-          doctor: 'Dr. Yusuf',
-          hospital: 'Chittagong Medical College',
-          time: '9.30 PM',
-          date: '5/11/2020',
-        },
-        {
-          doctor: 'Dr. Ismail',
-          hospital: 'CSCR',
-          time: '9.30 PM',
-          date: '6/11/2020',
-        },
-        {
-          doctor: 'Dr. Selina',
-          hospital: 'Chevron',
-          time: '9.30 PM',
-          date: '8/11/2020',
-        },
-      ],
+      lists: [],
     }
   },
+  created() {
+    this.getAppointmentList()
+  },
   methods: {
-    storeItemData(data) {
-      // localStorage.setItem('gigData', JSON.stringify(data))
-      // this.$router.push('/dashboard/gig')
-    },
     cancelAppointment(item) {},
+    getAppointmentList() {
+      this.$store
+        .dispatch('appointment/getAppointmentList', this.userData.id)
+        .then((response) => {
+          this.lists = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
   },
 }
 </script>

@@ -4,7 +4,7 @@
       <v-flex v-for="(hospital, i) in hospitals" :key="i" xs12 sm6 md3 lg3>
         <v-card class="mx-auto card_hover" max-width="344" outlined flat light>
           <v-hover v-slot:default="{ hover }">
-            <v-img :src="hospital.image" height="170px">
+            <v-img :src="baseURL + hospital.image" height="170px">
               <v-expand-transition>
                 <div
                   v-if="hover"

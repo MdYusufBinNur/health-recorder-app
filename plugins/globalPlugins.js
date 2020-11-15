@@ -11,6 +11,9 @@ Vue.mixin({
     bp() {
       return this.$vuetify.breakpoint
     },
+    baseURL() {
+      return 'http://health-recorder.test/'
+    },
   },
   methods: {},
 })
