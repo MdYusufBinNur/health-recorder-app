@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/named
-import { healthUserData, healthAuthToken } from '@/constants/AppTokens'
-const Cookie = process.client ? require('js-cookie') : undefined
-const loginQuery = ''
+import { healthUserToken, healthAuthToken } from '../constants/AppTokens'
+const Cookie = process.client ? require('js-cookie') : undefined;
+const loginQuery = '';
 
 function getAuthToken() {
   return Cookie
@@ -12,9 +12,8 @@ function getAuthToken() {
 }
 
 function getUserData() {
-  const token = localStorage.getItem(healthAuthToken)
-  return token !== null
-    ? JSON.parse(localStorage.getItem(healthAuthToken))
+  return localStorage.getItem(healthUserToken)
+    ? JSON.parse(localStorage.getItem(healthUserToken))
     : null
 }
 
@@ -49,7 +48,7 @@ export const mutations = {
 
   userData(state, userData) {
     state.userData = userData
-    localStorage.setItem(healthUserData, JSON.stringify(userData))
+    localStorage.setItem(healthUserToken, JSON.stringify(userData))
   },
 
   setAccessValidity(state, bool) {
@@ -57,7 +56,7 @@ export const mutations = {
   },
 
   purgeAuth(state) {
-    localStorage.removeItem(healthUserData)
+    localStorage.removeItem(healthUserToken)
     Cookie.remove(healthAuthToken)
     localStorage.removeItem(healthAuthToken)
     state.auth = null
@@ -68,9 +67,9 @@ export const mutations = {
 export const actions = {
   postLogin(context, payload) {
     return this.$axios
-      .post(`/login`, payload)
+      .post(`/login?include=${loginQuery}`, payload)
       .then((response) => {
-        context.commit('setAuth', response.data.accessToken)
+        context.commit('setAuth', response.data.access_token)
         context.commit('userData', response.data.user)
         return response
       })

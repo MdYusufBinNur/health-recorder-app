@@ -159,37 +159,38 @@ export default {
     },
 
     login() {
-      // this.isLoading = true
-      this.$router.push('/dashboard')
-      // if (!this.$refs.form.validate()) {
-      //
-      //   this.errorMessage = 'Please input valid data'
-      //   this.errorColor = 'error'
-      //   this.snackbar = true
-      //   this.isLoading = false
-      // } else {
-      //   this.resetValidation()
-      //
-      //   this.$store.dispatch('auth/postLogin', this.loginInfo)
-      //     .then((response) => {
-      //
-      //       this.goToSourceDestination()
-      //
-      //     })
-      //     .catch((error) => {
-      //
-      //       this.errorMessage = 'Invalid Credentials'
-      //       this.errorColor = 'error'
-      //       this.snackbar = true
-      //     })
-      //     .finally(() => {
-      //       this.isLoading = false
-      //     })
-      // }
+      this.isLoading = true
+      // this.$router.push('/dashboard')
+      if (!this.$refs.form.validate()) {
+        this.errorMessage = 'Please input valid data'
+        this.errorColor = 'error'
+        this.snackbar = true
+        this.isLoading = false
+      } else {
+        this.resetValidation()
+        this.$store
+          .dispatch('auth/postLogin', this.loginInfo)
+          .then((response) => {
+            if (response.data.message) {
+              this.errorMessage = response.data.message
+              this.errorColor = 'error'
+              this.snackbar = true
+            }
+            this.goToSourceDestination()
+          })
+          // eslint-disable-next-line handle-callback-err
+          .catch((error) => {
+            this.errorMessage = error.toString()
+            this.errorColor = 'error'
+            this.snackbar = true
+          })
+          .finally(() => {
+            this.isLoading = false
+          })
+      }
     },
 
     checkAuth(next, path) {
-      console.log(next)
       // only admin-group has the access to any property without association
       if (this.authToken !== null) {
         this.$router.push('/')

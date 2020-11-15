@@ -1,2 +1,2 @@
-export const beaconUserToken = 'healthUserData'
-export const beaconAuthToken = 'healthAuthData'
+export const healthUserToken = 'healthUserData'
+export const healthAuthToken = 'healthAuthData'
