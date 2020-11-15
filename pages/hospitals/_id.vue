@@ -6,7 +6,7 @@
     <v-row>
       <v-col cols="12" sm="4">
         <v-card max-width="344" outlined flat light>
-          <v-img :src="cmch" height="170px"></v-img>
+          <v-img :src="hospital.image" height="170px"></v-img>
           <v-list-item class="px-2">
             <v-list-item-content>
               <v-list-item-title class="font-weight-bold pl-1">
@@ -56,19 +56,12 @@ export default {
   data() {
     return {
       hospital: {},
-      cmch,
-      applo,
-      chvr,
-      dmc,
-      beh,
-      dc1,
-      dc2,
-      dc3,
-      dc4,
-      rating: 3,
-      hospital_details:
-        'Chittagong Medical College (CMC) is situated in the port city of Chittagong, Bangladesh and is the oldest medical college in the south-eastern part of the country. It is affiliated with a tertiary level hospital where clinical students are trained in medicine, surgery, obstetrics and gynaecology and other sub-specialties.[citation needed] Currently, students from Bhutan, India, Iran, Malaysia, Nepal, Palestine, Pakistan, and Sri Lanka are studying in various phases of MBBS course alongside the native student',
     }
+  },
+  inject: {
+    theme: {
+      default: { isDark: false },
+    },
   },
   created() {
     this.getHospitalDetails()
