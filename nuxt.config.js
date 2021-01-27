@@ -24,7 +24,7 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: ['@/plugins/globalPlugins.js', '@/plugins/axios.js'],
-
+  transpile: [/^vue2-google-maps($|\/)/],
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
 
@@ -46,8 +46,8 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    // baseURL: 'http://127.0.0.1:8000/api',
-    baseURL: 'http://health-recorder.test/api',
+     baseURL: 'http://127.0.0.1:8000/api',
+    // baseURL: 'http://health-recorder.test/api',
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)

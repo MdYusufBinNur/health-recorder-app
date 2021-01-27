@@ -31,6 +31,9 @@
           <v-divider />
           <p style="font-size: 13px" class="pa-1">{{ hospital.details }}</p>
         </v-card>
+        <iframe width="600" height="450" frameborder="0" style="border:0"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCaElQyMCbsyjftm6nbFJxPDkN7G0rcRrA&q=Space+Needle,Seattle+WA" allowfullscreen>
+        </iframe>
       </v-col>
       <v-col cols="12" sm="8" class="pa-0">
         <Doctors ref="doctor_details" :hospital="hospital" :details="true" />

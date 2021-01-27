@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import userRole from '@/mixins/userRole'
+import * as VueGoogleMaps from 'vue2-google-maps'
 
 Vue.mixin({
   data() {
@@ -18,3 +19,15 @@ Vue.mixin({
   methods: {},
 })
 Vue.mixin(userRole)
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyCaElQyMCbsyjftm6nbFJxPDkN7G0rcRrA',
+    libraries: 'places',
+    // This is required if you use the Autocomplete plugin
+    // OR: libraries: 'places,drawing'
+    // OR: libraries: 'places,drawing,visualization'
+    //     // (as you require)
+    //     // If you want to set the version, you can do so:
+    //     // v: '3.26',
+  }
+})
