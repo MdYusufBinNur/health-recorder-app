@@ -173,11 +173,11 @@ export default {
         },
         {
           text: 'Time',
-          value: 'app_time',
+          value: 'time',
         },
         {
           text: 'Date',
-          value: 'app_date',
+          value: 'date',
         },
         {
           text: 'Upload Prescription',

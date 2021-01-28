@@ -285,8 +285,8 @@ export default {
         patient_contact: this.patient_contact,
         patient_address: this.patient_address,
         patient_age: this.patient_age,
-        app_time: this.appointment_time,
-        app_date: this.appointment_date,
+        time: this.appointment_time,
+        date: this.appointment_date,
       }
     },
   },

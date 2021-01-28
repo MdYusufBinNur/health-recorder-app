@@ -103,7 +103,7 @@
                 flat
                 light
               >
-                <v-img :src="doctor.image" height="170px"></v-img>
+                <v-img :src="baseURL + doctor.image" height="170px"></v-img>
                 <v-list-item class="px-2">
                   <v-list-item-content>
                     <h2 class="font-weight-bold secondary--text pl-1">

@@ -13,7 +13,8 @@ Vue.mixin({
       return this.$vuetify.breakpoint
     },
     baseURL() {
-      return 'http://health-recorder.test/'
+      // return 'http://health-recorder.test/'
+      return 'http://127.0.0.1:8000/'
     },
   },
   methods: {},
