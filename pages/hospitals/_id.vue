@@ -28,54 +28,72 @@
         </v-card>
         <v-card flat light outlined class="mt-5" max-width="344">
           <h3 class="pa-1">About {{ hospital.name }}</h3>
-          <v-divider />
+          <v-divider/>
           <p style="font-size: 13px" class="pa-1">{{ hospital.details }}</p>
         </v-card>
-        <iframe width="600" height="450" frameborder="0" style="border:0"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCaElQyMCbsyjftm6nbFJxPDkN7G0rcRrA&q=Space+Needle,Seattle+WA" allowfullscreen>
-        </iframe>
+        <div class="mapouter mt-5">
+          <div class="gmap_canvas">
+
+            <iframe width="342" height="250" id="gmap_canvas"
+                    :src="'https://www.google.com/maps/embed/v1/place?key=AIzaSyAktJ_mh-R5DmhdXCGOn2vlGv4vHZ0QKf4&center='+hospital.center+'&zoom=18&q=Bangladesh'"
+                    frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+          </div>
+        </div>
       </v-col>
       <v-col cols="12" sm="8" class="pa-0">
-        <Doctors ref="doctor_details" :hospital="hospital" :details="true" />
+        <Doctors ref="doctor_details" :hospital="hospital" :details="true"/>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import Doctors from '../../components/Doctors/Doctors'
-export default {
-  name: 'Details',
-  components: { Doctors },
-  data() {
-    return {
-      hospital: {},
-    }
-  },
-  inject: {
-    theme: {
-      default: { isDark: false },
+  import Doctors from '../../components/Doctors/Doctors'
+
+  export default {
+    name: 'Details',
+    components: {Doctors},
+    data() {
+      return {
+        hospital: {},
+        currentLocation: {},
+        circleOptions: {},
+        mapStyle: [],
+        clusterStyle: [
+          {
+            url: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m1.png",
+            width: 56,
+            height: 56,
+            textColor: "#fff"
+          }
+        ]
+      }
     },
-  },
-  created() {
-    this.getHospitalDetails()
-  },
-  methods: {
-    getHospitalDetails() {
-      try {
-        this.$axios
-          .get('/hospital/' + this.$route.params.id)
-          .then((response) => {
-            this.hospital = response.data
-            this.loading = false
-          })
-          .catch((error) => {
-            console.error(error.message)
-          })
-      } catch (e) {}
+    inject: {
+      theme: {
+        default: {isDark: false},
+      },
     },
-  },
-}
+    created() {
+      this.getHospitalDetails()
+    },
+    methods: {
+      getHospitalDetails() {
+        try {
+          this.$axios
+            .get('/hospital/' + this.$route.params.id)
+            .then((response) => {
+              this.hospital = response.data
+              this.loading = false
+            })
+            .catch((error) => {
+              console.error(error.message)
+            })
+        } catch (e) {
+        }
+      },
+    },
+  }
 </script>
 
 <style scoped></style>

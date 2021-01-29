@@ -83,13 +83,28 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Welcome',
+          text: 'Home',
           to: '/',
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire',
+          icon: 'mdi-apps',
+          text: 'Hospitals',
+          to: '/hospitals',
+        },
+        {
+          icon: 'mdi-apps',
+          text: 'Schedule',
+          to: '/schedule',
+        },
+        {
+          icon: 'mdi-apps',
+          text: 'Appointment List',
+          to: '/dashboard/appointment/list',
+        },
+        {
+          icon: 'mdi-apps',
+          text: 'Doctors',
+          to: '/doctors',
         },
       ],
       miniVariant: false,
@@ -111,6 +126,16 @@ export default {
           icon: 'mdi-apps',
           text: 'Schedule',
           to: '/schedule',
+        },
+        {
+          icon: 'mdi-apps',
+          text: 'Donors',
+          to: '/donors',
+        },
+        {
+          icon: 'mdi-apps',
+          text: 'Ambulance',
+          to: '/ambulance',
         },
         {
           icon: 'mdi-apps',
