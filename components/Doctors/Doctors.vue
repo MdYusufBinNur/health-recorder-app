@@ -148,7 +148,6 @@
   </v-container>
 </template>
 <script>
-
 export default {
   // eslint-disable-next-line vue/require-prop-types
   props: ['hospital', 'details'],
@@ -193,7 +192,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: 'softarray services page',
+          content: '',
         },
       ],
     }

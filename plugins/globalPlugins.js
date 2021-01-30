@@ -13,8 +13,8 @@ Vue.mixin({
       return this.$vuetify.breakpoint
     },
     baseURL() {
-      // return 'http://health-recorder.test/'
-      return 'http://127.0.0.1:8000/'
+      return 'http://health-recorder.test/'
+      // return 'http://127.0.0.1:8000/'
     },
   },
   methods: {},
@@ -30,5 +30,5 @@ Vue.use(VueGoogleMaps, {
     //     // (as you require)
     //     // If you want to set the version, you can do so:
     //     // v: '3.26',
-  }
+  },
 })

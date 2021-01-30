@@ -45,15 +45,19 @@
         >
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title> {{ reminder.medicine }} </v-list-item-title>
+              <v-list-item-title
+                >{{ reminder.medicine_name }}
+              </v-list-item-title>
               <p style="font-size: 13px">
                 {{ reminder.day }}, {{ reminder.time }}
               </p>
-              <p style="font-size: 13px">End Date: {{ reminder.endDate }}</p>
+              <p style="font-size: 13px">End Date: {{ reminder.end_date }}</p>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn small outlined icon color="red">
-                <v-icon small dense> mdi-delete-outline </v-icon>
+              <v-btn small outlined icon :loading="delloading" color="red">
+                <v-icon small dense @click="deleteReminder(reminder)"
+                  >mdi-delete-outline
+                </v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
@@ -183,6 +187,7 @@ export default {
       medicine: '',
       snackbar: false,
       loading: false,
+      delloading: false,
       errorMessage: '',
       errorColor: '',
       valid: true,
@@ -191,29 +196,14 @@ export default {
       date: null,
       menu2: false,
       menu3: false,
-      schedules: [
-        {
-          medicine: 'Sergel 20Mg',
-          type: 'capsule',
-          day: ['saturday', 'sunday', 'monday'],
-          time: '7.30 AM',
-          endDate: '21/12/2020',
-        },
-        {
-          medicine: 'Omidon 20Mg',
-          type: 'capsule',
-          day: ['saturday', 'sunday', 'monday'],
-          time: '7.30 AM',
-          endDate: '21/12/2020',
-        },
-        {
-          medicine: 'Concor 5+',
-          type: 'capsule',
-          day: ['saturday', 'sunday', 'monday'],
-          time: '7.30 AM',
-          endDate: '21/12/2020',
-        },
-      ],
+      schedules: [],
+      reminderData: {
+        user_id: '',
+        end_date: '',
+        medicine_name: '',
+        time: '',
+        day: '',
+      },
       selected_days: [],
       days: [
         'Saturday',
@@ -230,6 +220,9 @@ export default {
       endRules: [(v) => !!v || 'Please Select End Date Of You Schedule'],
     }
   },
+  created() {
+    this.initSchedule()
+  },
   methods: {
     createReminder() {
       if (!this.$refs.form.validate()) {
@@ -239,10 +232,56 @@ export default {
         this.loading = false
       } else {
         this.loading = true
+        this.reminderData.medicine_name = this.medicine
+        this.reminderData.end_date = this.date
+        this.reminderData.time = this.time
+        this.reminderData.user_id = this.userData.id
+        this.reminderData.day = this.selected_days.toString()
+        this.$axios
+          .post('/schedules', this.reminderData)
+          .then((response) => {
+            this.initSchedule()
+            this.$refs.form.reset()
+          })
+          // eslint-disable-next-line handle-callback-err
+          .catch((error) => {})
+          .finally(() => {
+            this.loading = false
+          })
       }
     },
     validate() {
       this.$refs.form.validate()
+    },
+    initSchedule() {
+      this.$axios
+        .get('/schedule/' + this.userData.id)
+        .then((response) => {
+          this.schedules = response.data
+        })
+        // eslint-disable-next-line handle-callback-err
+        .catch((error) => {})
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    deleteReminder(reminder) {
+      this.selloading = true
+      this.$axios
+        .delete('/schedules/' + reminder.id)
+        .then((response) => {
+          if (response.data === 'success') {
+            this.errorMessage = 'Delete Successfully'
+            this.errorColor = 'success'
+            this.snackbar = true
+            this.schedules.splice(this.schedules.indexOf(reminder), 1)
+          }
+        })
+        // eslint-disable-next-line handle-callback-err
+        .catch((error) => {})
+        .finally(() => {
+          this.delloading = false
+        })
     },
   },
 }
