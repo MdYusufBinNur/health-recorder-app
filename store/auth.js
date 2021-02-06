@@ -78,6 +78,18 @@ export const actions = {
       })
   },
 
+  register(context, payload) {
+    return this.$axios
+      .post('/register' , payload)
+      .then((response) => {
+        context.commit('setAuth', response.data.access_token)
+        context.commit('userData', response.data.user)
+        return response
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
   saveUserData(context, payload) {
     const id = payload.id
     delete payload.id
@@ -98,18 +110,6 @@ export const actions = {
 
   setAccessValidity(context, payload) {
     return context.commit('setAccessValidity', payload)
-  },
-
-  fetchLoggedIn(context) {
-    return this.$axios
-      .get(`/user/me?include=${loginQuery}`)
-      .then((response) => {
-        context.commit('userData', response.data.data)
-        return response
-      })
-      .catch((error) => {
-        return Promise.reject(error)
-      })
   },
 
   logout(context) {

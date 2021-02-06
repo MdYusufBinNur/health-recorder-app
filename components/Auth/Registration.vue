@@ -4,6 +4,7 @@
       class="text-center"
       outlined
       flat
+      light
       :width="$vuetify.breakpoint.mdAndUp ? '600' : '300'"
     >
       <v-card-text>
@@ -11,7 +12,7 @@
           <v-row>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? '6' : '12'">
               <v-text-field
-                v-model="first_name"
+                v-model="editedItem.name"
                 color="secondary"
                 outlined
                 label="First Name"
@@ -22,29 +23,7 @@
             </v-col>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? '6' : '12'">
               <v-text-field
-                v-model="last_name"
-                color="secondary"
-                outlined
-                label="Last Name"
-                hide-details="auto"
-                required
-                type="text"
-              ></v-text-field>
-            </v-col>
-            <v-col :cols="$vuetify.breakpoint.mdAndUp ? '6' : '12'">
-              <v-text-field
-                v-model="email"
-                color="secondary"
-                outlined
-                label="Email"
-                hide-details="auto"
-                required
-                type="email"
-              ></v-text-field>
-            </v-col>
-            <v-col :cols="$vuetify.breakpoint.mdAndUp ? '6' : '12'">
-              <v-text-field
-                v-model="phone"
+                v-model="editedItem.mobile"
                 color="secondary"
                 outlined
                 label="Phone"
@@ -53,21 +32,32 @@
                 type="tel"
               ></v-text-field>
             </v-col>
+            <v-col :cols="$vuetify.breakpoint.mdAndUp ? '12' : '12'">
+              <v-text-field
+                v-model="editedItem.email"
+                color="secondary"
+                outlined
+                label="Email"
+                hide-details="auto"
+                required
+                type="email"
+              ></v-text-field>
+            </v-col>
+
             <v-col cols="12">
               <v-overflow-btn
                 :items="dropdown_edit"
-                label="Select Country"
+                label="Select Gender"
                 editable
                 outlined
                 item-value="text"
+                hide-details="auto"
+                v-model="editedItem.gender"
               ></v-overflow-btn>
-            </v-col>
-            <v-col cols="12">
-              <v-textarea outlined rows="1" label="Address"></v-textarea>
             </v-col>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? '6' : '12'">
               <v-text-field
-                v-model="password"
+                v-model="editedItem.password"
                 outlined
                 color="secondary"
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -80,7 +70,7 @@
             </v-col>
             <v-col :cols="$vuetify.breakpoint.mdAndUp ? '6' : '12'">
               <v-text-field
-                v-model="confirm_password"
+                v-model="editedItem.confirm_password"
                 outlined
                 color="secondary"
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -114,7 +104,7 @@
           large
           class="success mb-5"
           :loading="isLoading"
-          @click="login()"
+          @click="register()"
         >
           Create
         </v-btn>
@@ -152,7 +142,7 @@
       :width="$vuetify.breakpoint.mdAndUp ? '400' : '300'"
     >
       <v-card-actions class="text-center">
-        <v-btn text block large to="login" color="teal" class="white--text">
+        <v-btn text block large to="/auth" color="teal" class="white--text">
           Sign In
         </v-btn>
       </v-card-actions>
@@ -188,18 +178,89 @@ export default {
     password: '',
     confirm_password: '',
     dropdown_edit: [
-      { text: 'USA' },
-      { text: 'UK' },
-      { text: 'AUSTRALIA' },
-      { text: 'BANGLADESH' },
-      { text: 'PAKISTAN' },
-      { text: 'INDIA' },
-      { text: 'UAE' },
+      { text: 'Male' },
+      { text: 'Female' }
     ],
     isLoggedIn: false,
     snackbar: false,
     errorMessage: '',
     errorColor: '',
+    editedItem: {
+      name: '',
+      email: '',
+      mobile: '',
+      gender: '',
+      password: '',
+      confirm_password: '',
+      age: 0,
+      role: 'user'
+    }
   }),
+  methods: {
+    validate() {
+      this.$refs.form.validate()
+    },
+    resetValidation() {
+      this.$refs.form.resetValidation()
+    },
+    goToSourceDestination() {
+      if (this.isDialog) {
+        this.$emit('closeAuthentication')
+      } else {
+        this.$router.push('/auth')
+
+      }
+    },
+    register() {
+      this.isLoading = true
+      if (!this.$refs.form.validate()) {
+        this.errorMessage = 'Please input valid data'
+        this.errorColor = 'error'
+        this.snackbar = true
+        this.isLoading = false
+        return ;
+      }
+      if (!this.agreement) {
+        this.errorMessage = 'Please accept our terms and conditions'
+        this.errorColor = 'error'
+        this.snackbar = true
+        this.isLoading = false
+        return ;
+      }
+      else {
+        this.$store
+          .dispatch('auth/register', this.editedItem)
+          .then((response) => {
+            this.errorMessage = 'Registered Successfully'
+            this.errorColor = 'success'
+            this.snackbar = true
+            this.resetValidation()
+            this.goToSourceDestination()
+          })
+          .catch((error) => {
+             console.log(error)
+            // console.log("1 error ==> " , error)
+            // console.log("2 error ==> ",error)
+            // console.log("3 error ==> ",error.message)
+            // this.setErrorMessages(error.response.data.errors)
+            // this.$toast.error("Error")
+            this.errorMessage = error.message
+            this.errorColor = 'error'
+            this.snackbar = true
+          })
+          .finally(() => {
+            this.isLoading = false
+          })
+      }
+    },
+    checkAuth(next, path) {
+      // only admin-group has the access to any property without association
+      if (this.authToken !== null) {
+        this.$router.push('/')
+      } else {
+        this.$router.push('/auth')
+      }
+    },
+  }
 }
 </script>

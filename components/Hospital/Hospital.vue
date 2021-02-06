@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-lg>
-    <v-layout row wrap justify-center>
+    <v-layout row wrap justify-start>
       <v-flex v-for="(hospital, i) in hospitals" :key="i" xs12 sm6 md3 lg3>
         <v-card class="mx-auto card_hover" max-width="344" outlined flat light>
           <v-hover v-slot:default="{ hover }">

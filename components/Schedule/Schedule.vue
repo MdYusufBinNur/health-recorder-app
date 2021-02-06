@@ -17,7 +17,7 @@
           <v-list-item>
             <v-list-item-content class="">
               <v-list-item-title class="d-flex justify-center font-weight-bold">
-                Md Yusuf Bin Nur
+                {{ this.userData.name ? this.userData.name : 'Alex' }}
               </v-list-item-title>
               <v-list-item-subtitle class="d-flex justify-center"
                 >Gender : Male</v-list-item-subtitle

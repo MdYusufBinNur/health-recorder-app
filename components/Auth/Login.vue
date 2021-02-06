@@ -79,7 +79,7 @@
       :width="$vuetify.breakpoint.mdAndUp ? '400' : '300'"
     >
       <v-card-actions class="text-center">
-        <v-btn block large to="registration" color="teal" class="white--text">
+        <v-btn block large to="/registration" color="teal" class="white--text">
           Create Free Account
         </v-btn>
       </v-card-actions>

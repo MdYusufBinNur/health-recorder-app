@@ -2,8 +2,6 @@
   <v-container grid-list-lg class="pt-5">
     <v-layout row wrap justify-center align-center>
       <v-flex
-        v-for="service in services"
-        :key="service.service_title"
         xs12
         sm6
         md4
@@ -24,7 +22,7 @@
                 center
                 contain
                 aspect-ratio="1"
-                :src="service.icon"
+                :src="doctor"
               ></v-img>
 
               <v-spacer></v-spacer>
@@ -32,11 +30,87 @@
             <v-list-item-content class="text-center mt-3">
               <v-list-item-title
                 class="text_hover headline font-weight-bold text-uppercase"
-                >{{ service.number }}</v-list-item-title
+                >{{ doctors }}</v-list-item-title
               >
-              <v-list-item-title class="text_hover text-uppercase mt-2">{{
-                service.service_title
-              }}</v-list-item-title>
+              <v-list-item-title class="text_hover text-uppercase mt-2">
+                Total Doctors
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-card>
+        </v-hover>
+      </v-flex>
+      <v-flex
+        xs12
+        sm6
+        md4
+        lg3
+      >
+        <v-hover v-slot:default="{ hover }" open-delay="10">
+          <v-card
+            :height="$vuetify.breakpoint.mdAndUp ? '250' : '250'"
+            flat
+            :elevation="hover ? 8 : 3"
+            class="card_hover"
+            light
+          >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-img
+                class="icon_hover"
+                center
+                contain
+                aspect-ratio="1"
+                :src="hospital"
+              ></v-img>
+
+              <v-spacer></v-spacer>
+            </v-card-actions>
+            <v-list-item-content class="text-center mt-3">
+              <v-list-item-title
+                class="text_hover headline font-weight-bold text-uppercase"
+                >{{ hospitals }}</v-list-item-title
+              >
+              <v-list-item-title class="text_hover text-uppercase mt-2">
+                Total Hospitals
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-card>
+        </v-hover>
+      </v-flex>
+      <v-flex
+        xs12
+        sm6
+        md4
+        lg3
+      >
+        <v-hover v-slot:default="{ hover }" open-delay="10">
+          <v-card
+            :height="$vuetify.breakpoint.mdAndUp ? '250' : '250'"
+            flat
+            :elevation="hover ? 8 : 3"
+            class="card_hover"
+            light
+          >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-img
+                class="icon_hover"
+                center
+                contain
+                aspect-ratio="1"
+                :src="donor"
+              ></v-img>
+
+              <v-spacer></v-spacer>
+            </v-card-actions>
+            <v-list-item-content class="text-center mt-3">
+              <v-list-item-title
+                class="text_hover headline font-weight-bold text-uppercase"
+                >{{ donors }}</v-list-item-title
+              >
+              <v-list-item-title class="text_hover text-uppercase mt-2">
+                Total Donors
+              </v-list-item-title>
             </v-list-item-content>
           </v-card>
         </v-hover>
@@ -58,6 +132,9 @@ export default {
       doctor,
       hospital,
       donor,
+      hospitals: '',
+      doctors: '',
+      donors: '',
       services: [
         {
           service_title: ' Total Doctors ',
@@ -80,18 +157,21 @@ export default {
       ],
     }
   },
-  head() {
-    return {
-      title: this.title,
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'softarray services page',
-        },
-      ],
-    }
+  created() {
+    this.initIndexInfo()
   },
+  methods: {
+    initIndexInfo() {
+      this.$axios
+        .get('/indexInfo')
+        .then((response) => {
+          console.log(response)
+          this.hospitals = response.data.hospitals
+          this.doctors = response.data.doctors
+          this.donors = response.data.donors
+        })
+    }
+  }
 }
 </script>
 
